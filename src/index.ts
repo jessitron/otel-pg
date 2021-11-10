@@ -2,6 +2,10 @@ import "./tracing";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {User} from "./entity/User";
+import * as otel from "@opentelemetry/api";
+
+const span = otel.trace.getTracer("hoo").startSpan("banana");
+span.end();
 
 createConnection().then(async connection => {
 
