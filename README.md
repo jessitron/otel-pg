@@ -9,7 +9,7 @@ This project is gonna use TypeORM (seems popular, has autoinstrumentation) with 
 Accessing a db from the command line is like:
 
 ```bash
-sqlite3 db
+sqlite3 data/db
 ```
 
 (where db is the file containing the database)
