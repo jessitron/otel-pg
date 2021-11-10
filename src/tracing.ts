@@ -7,6 +7,7 @@ import opentelemetry = require('@opentelemetry/sdk-node');
 import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-base';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { TypeormInstrumentation } from 'opentelemetry-instrumentation-typeorm';
 
 // configure the SDK to export telemetry data to the console
 // enable all auto-instrumentations from the meta package
@@ -16,7 +17,7 @@ const sdk = new opentelemetry.NodeSDK({
     [SemanticResourceAttributes.SERVICE_NAME]: 'band-names',
   }),
   traceExporter,
- // instrumentations: [getNodeAutoInstrumentations()]
+  instrumentations: [new TypeormInstrumentation({})]
 });
 
 // initialize the SDK and register with the OpenTelemetry API
