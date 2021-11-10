@@ -12,12 +12,13 @@
    "author": "@jessitron",
    "license": "ISC",
    "devDependencies": {
-      "ts-node": "3.3.0",
       "@types/node": "^8.0.29",
+      "ts-node": "3.3.0",
       "typescript": "3.3.3333"
    },
    "dependencies": {
-      "typeorm": "0.2.39",
-      "reflect-metadata": "^0.1.10"
+      "better-sqlite3": "^7.4.4",
+      "reflect-metadata": "^0.1.10",
+      "typeorm": "0.2.39"
    }
 }
