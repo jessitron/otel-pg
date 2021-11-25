@@ -26,7 +26,7 @@ app.listen(parseInt(PORT, 10), () => {
 });
 }
 
-createConnection().then(async connection => {
+tracingStartup.then(createConnection).then(async connection => {
 
     console.log("Inserting a new user into the database...");
     const user = new User();

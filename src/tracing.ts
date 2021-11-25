@@ -20,7 +20,7 @@ const sdk = new opentelemetry.NodeSDK({
     [SemanticResourceAttributes.SERVICE_NAME]: 'band-names',
   }),
   traceExporter,
-  instrumentations: [getNodeAutoInstrumentations()]//[new TypeormInstrumentation({})]
+  instrumentations: [getNodeAutoInstrumentations(), new TypeormInstrumentation({})]
 });
 
 
