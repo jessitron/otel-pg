@@ -11,10 +11,19 @@ import { TypeormInstrumentation } from 'opentelemetry-instrumentation-typeorm';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 
 import * as otel from "@opentelemetry/api";
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
+import { credentials, Metadata } from '@grpc/grpc-js';
 
-// configure the SDK to export telemetry data to the console
-// enable all auto-instrumentations from the meta package
-const traceExporter = new opentelemetry.tracing.ConsoleSpanExporter();
+const metadata = new Metadata()
+metadata.set('x-honeycomb-team', process.env.HONEYCOMB_API_KEY);
+metadata.set('x-honeycomb-dataset', process.env.HONEYCOMB_DATASET || 'otel-db-band-names');
+
+const traceExporter = new OTLPTraceExporter({
+  url: 'grpc://api.honeycomb.io:443/',
+  credentials: credentials.createSsl(),
+  metadata
+}); 
+
 const sdk = new opentelemetry.NodeSDK({
   resource: new Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: 'band-names',
