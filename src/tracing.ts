@@ -14,8 +14,12 @@ import * as otel from "@opentelemetry/api";
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
 import { credentials, Metadata } from '@grpc/grpc-js';
 
+otel.diag.setLogger(new otel.DiagConsoleLogger(), otel.DiagLogLevel.WARN);
+
+
 const metadata = new Metadata()
-metadata.set('x-honeycomb-team', process.env.HONEYCOMB_API_KEY);
+metadata.set('x-honeycomb-team', process.env.HONEYCOMB_API_KEY);;
+console.log("using api key: " + process.env.HONEYCOMB_API_KEY)
 metadata.set('x-honeycomb-dataset', process.env.HONEYCOMB_DATASET || 'otel-db-band-names');
 
 const traceExporter = new OTLPTraceExporter({
