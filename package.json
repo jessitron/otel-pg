@@ -18,8 +18,10 @@
    },
    "dependencies": {
       "@opentelemetry/api": "^1.0.3",
+      "@opentelemetry/auto-instrumentations-node": "^0.26.2",
       "@opentelemetry/sdk-node": "^0.26.0",
       "better-sqlite3": "^7.4.4",
+      "express": "^4.17.1",
       "opentelemetry-instrumentation-typeorm": "^0.26.0",
       "reflect-metadata": "^0.1.10",
       "typeorm": "0.2.39"

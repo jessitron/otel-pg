@@ -1,11 +1,30 @@
-import "./tracing";
+import tracingStartup from "./tracing";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {User} from "./entity/User";
+
+import express = require("express");
 import * as otel from "@opentelemetry/api";
 
-const span = otel.trace.getTracer("hoo").startSpan("banana");
-span.end();
+tracingStartup.then(() => {
+    const tracerProvider = otel.trace;
+    const span = tracerProvider.getTracer("hoo").startSpan("banana");
+    span.end();
+});
+
+function initExpress() {
+
+const PORT = process.env.PORT || "8080";
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
+app.listen(parseInt(PORT, 10), () => {
+  console.log(`Listening for requests on http://localhost:${PORT}`);
+});
+}
 
 createConnection().then(async connection => {
 
@@ -21,6 +40,6 @@ createConnection().then(async connection => {
     const users = await connection.manager.find(User);
     console.log("Loaded users: ", users);
 
-    console.log("Here you can setup and run express/koa/any other framework.");
+    initExpress();
 
 }).catch(error => console.log(error));
