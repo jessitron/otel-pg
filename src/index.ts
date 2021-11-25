@@ -5,11 +5,14 @@ import {User} from "./entity/User";
 
 import express = require("express");
 import * as otel from "@opentelemetry/api";
+import { SIGTERM } from "constants";
 
 tracingStartup.then(() => {
     const tracerProvider = otel.trace;
     const span = tracerProvider.getTracer("hoo").startSpan("banana");
     span.end();
+    
+process.kill(process.pid, 'SIGTERM')
 });
 
 function initExpress() {
@@ -26,20 +29,21 @@ app.listen(parseInt(PORT, 10), () => {
 });
 }
 
-tracingStartup.then(createConnection).then(async connection => {
+// tracingStartup.then(createConnection).then(async connection => {
 
-    console.log("Inserting a new user into the database...");
-    const user = new User();
-    user.firstName = "Timber";
-    user.lastName = "Saw";
-    user.age = 25;
-    await connection.manager.save(user);
-    console.log("Saved a new user with id: " + user.id);
+//     console.log("Inserting a new user into the database...");
+//     const user = new User();
+//     user.firstName = "Timber";
+//     user.lastName = "Saw";
+//     user.age = 25;
+//     await connection.manager.save(user);
+//     console.log("Saved a new user with id: " + user.id);
 
-    console.log("Loading users from the database...");
-    const users = await connection.manager.find(User);
-    console.log("Loaded users: ", users);
+//     console.log("Loading users from the database...");
+//     const users = await connection.manager.find(User);
+//     console.log("Loaded users: ", users);
 
-    initExpress();
+//     initExpress();
 
-}).catch(error => console.log(error));
+// }).catch(error => console.log(error));
+
