@@ -1,6 +1,10 @@
 {
-   "type": "better-sqlite3",
-   "database": "data/db",
+   "type": "postgres",
+   "host": "db",
+   "port": 5432,
+   "username": "postgres",
+   "password": "postgres",
+   "database": "yo",
    "synchronize": true,
    "logging": false,
    "entities": [
