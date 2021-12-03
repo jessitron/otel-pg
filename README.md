@@ -19,3 +19,11 @@ and then you need to create a db
 (this needs to match the database in ormconfig.json)
 
 It would be better to create a matching user, but this is the minimum that works, for now.
+
+## Run
+
+```bash
+export HONEYCOMB_API_KEY=your api key
+unset NODE_OPTIONS # for a current vscode bug, hopefully fixed soon. Do this if node won't start because of an unfound file in .vscode
+npm run start
+```
