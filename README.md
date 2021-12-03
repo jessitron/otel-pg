@@ -6,17 +6,16 @@ This project is gonna use TypeORM (seems popular, has autoinstrumentation) with 
 
 ## Database
 
-Accessing a db from the command line is like:
+access the database:
 
-```bash
-sqlite3 data/db
-```
+`psql --host db --user postgres`
 
-(where db is the file containing the database)
+and then the password is `postgres`
 
-and then you need to know:
+and then you need to create a db
 
-`.exit` quits
-`.fullschema` probably prints something useful
+`create database yo;`
 
-Docs: https://www.sqlite.org/cli.html
+(this needs to match the database in ormconfig.json)
+
+It would be better to create a matching user, but this is the minimum that works, for now.
