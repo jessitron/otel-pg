@@ -1,4 +1,4 @@
-module.exports = {
+config = {
    "type": "postgres",
    "url": process.env.DATABASE_URL,
    "synchronize": true,
@@ -17,7 +17,13 @@ module.exports = {
       "migrationsDir": "src/migration",
       "subscribersDir": "src/subscriber"
    },
-   ssl: {
+};
+
+if (process.env.USE_CRAPPY_SSL) {
+   config.ssl =  {
       rejectUnauthorized: false
    }
 }
+
+module.exports = config
+ 
