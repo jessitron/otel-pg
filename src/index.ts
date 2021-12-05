@@ -45,7 +45,7 @@ class WinController {
 
     const username = "jessitron";
     const record = new Winnings(username, 1);
-    this.winRepository.save(record);
+    await this.winRepository.save(record);
 
     const { total_winnings } = await this.winRepository
       .createQueryBuilder("wins")
