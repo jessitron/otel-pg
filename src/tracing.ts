@@ -20,7 +20,7 @@ otel.diag.setLogger(new otel.DiagConsoleLogger(), otel.DiagLogLevel.WARN);
 const metadata = new Metadata()
 metadata.set('x-honeycomb-team', process.env.HONEYCOMB_API_KEY);;
 console.log("using api key: " + process.env.HONEYCOMB_API_KEY)
-metadata.set('x-honeycomb-dataset', process.env.HONEYCOMB_DATASET || 'otel-db-band-names');
+metadata.set('x-honeycomb-dataset', process.env.HONEYCOMB_DATASET || 'otel-pg');
 
 const traceExporter = new OTLPTraceExporter({
   url: 'grpc://api.honeycomb.io:443/',
@@ -30,7 +30,7 @@ const traceExporter = new OTLPTraceExporter({
 
 const sdk = new opentelemetry.NodeSDK({
   resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'band-names',
+    [SemanticResourceAttributes.SERVICE_NAME]: 'otel-pg-express',
   }),
   traceExporter,
   instrumentations: [getNodeAutoInstrumentations(), new TypeormInstrumentation({})]
@@ -43,7 +43,7 @@ const sdk = new opentelemetry.NodeSDK({
 const tracingStartup = sdk.start()
   .then(() => {
     const tracerProvider = otel.trace;
-  console.log('Tracing initialized' + tracerProvider)}
+  console.log('Tracing initialized')}
   )
   .catch((error) => console.log('Error initializing tracing', error));
 

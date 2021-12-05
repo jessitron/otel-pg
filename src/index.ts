@@ -1,45 +1,58 @@
 import tracingStartup from "./tracing";
 import "reflect-metadata";
-import {createConnection} from "typeorm";
-import {User} from "./entity/User";
+import { Connection, createConnection, Repository } from "typeorm";
 
 import express = require("express");
 import * as otel from "@opentelemetry/api";
+import { Winnings } from "./entity/Winnings";
 
 tracingStartup.then(() => {
-    const tracerProvider = otel.trace;
-    const span = tracerProvider.getTracer("hoo").startSpan("banana");
-    span.end();
+  const tracerProvider = otel.trace;
+  const span = tracerProvider.getTracer("hoo").startSpan("banana");
+  span.end();
 });
 
-function initExpress() {
+function initExpress(connection: Connection) {
+  const PORT = process.env.PORT || "8080";
+  const app = express();
 
-const PORT = process.env.PORT || "8080";
-const app = express();
+  app.get("/", (req, res) => {
+    res.send("Hello World");
+  });
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+  const winController = new WinController(connection.getRepository(Winnings));
+  app.get("/win", winController.respondToWin)
 
-app.listen(parseInt(PORT, 10), () => {
-  console.log(`Listening for requests on http://localhost:${PORT}`);
-});
+  app.listen(parseInt(PORT, 10), () => {
+    console.log(`Listening for requests on http://localhost:${PORT}`);
+  });
 }
 
-tracingStartup.then(createConnection).then(async connection => {
+tracingStartup
+  .then(createConnection)
+  .then(async connection => {
 
-    console.log("Inserting a new user into the database...");
-    const user = new User();
-    user.firstName = "Timber";
-    user.lastName = "Saw";
-    user.age = 25;
-    await connection.manager.save(user);
-    console.log("Saved a new user with id: " + user.id);
+    initExpress(connection);
 
-    console.log("Loading users from the database...");
-    const users = await connection.manager.find(User);
-    console.log("Loaded users: ", users);
+  }).catch(error => console.log(error));
 
-    initExpress();
+class WinController {
 
-}).catch(error => console.log(error));
+  constructor(private readonly winRepository: Repository<Winnings>) {
+  }
+
+  public respondToWin = async (req: express.Request, res: express.Response) => {
+
+    const username = "jessitron";
+    const record = new Winnings(username, 1);
+    this.winRepository.save(record);
+
+    const { total_winnings } = await this.winRepository
+      .createQueryBuilder("wins")
+      .select("SUM(winnings)", "total_winnings")
+      .where("wins.username = :username", { username })
+      .getRawOne();
+
+    res.send("Total so far:" + total_winnings);
+  }
+}
