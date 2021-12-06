@@ -6,6 +6,9 @@ This project uses TypeORM (seems popular, has autoinstrumentation) with PostgreS
 
 (I tried SQLite but its traces weren't nearly as useful)
 
+Success: I happened to find a bug in development, by looking at the trace. I wrote it up
+[on my blog](https://jessitron.com/2021/12/05/tracing-makes-a-bug-easy-to-spot/)
+
 ## What does it do?
 
 Not much so far. Hit `/` for "Hello World"
